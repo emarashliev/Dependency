@@ -1,26 +1,31 @@
 //
 //  Dependency.swift
-//  
+//
 //
 //  Created by Emil Marashliev on 27.01.25.
 //
 
-import Foundation
-
 @propertyWrapper
 public struct Dependency<Value>: Sendable {
+
+    public var wrappedValue: Value {
+        let dependencies = self.initialValues.merging(DependencyValues.current)
+        return DependencyValues.$current.withValue(dependencies) {
+            DependencyValues.current[keyPath: self.keyPath]
+        }
+    }
+
+    let initialValues: DependencyValues
+
     private let keyPath: KeyPath<DependencyValues, Value> & Sendable
 
     public init(_ keyPath: KeyPath<DependencyValues, Value> & Sendable) {
+        self.initialValues = DependencyValues.current
         self.keyPath = keyPath
     }
 
     public init<Key: DependencyKey>(_ key: Key.Type) where Key.Value == Value {
         self.init(\DependencyValues.[key: HashableType<Key>()])
-    }
-
-    public var wrappedValue: Value {
-        DependencyValues.current[keyPath: self.keyPath]
     }
 }
 
@@ -44,3 +49,4 @@ extension DependencyValues {
         }
     }
 }
+
