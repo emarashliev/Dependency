@@ -1,6 +1,13 @@
 # Dependency
+[![Swift Version](https://img.shields.io/badge/Swift-6+-orange.svg)](https://swift.org)
+[![iOS](https://img.shields.io/badge/iOS-15.0+-lightgrey.svg)](https://developer.apple.com/ios/)
+[![macOS](https://img.shields.io/badge/macOS-10.15+-lightgrey.svg)](https://developer.apple.com/macos/)
+[![tvOS](https://img.shields.io/badge/tvOS-15.0+-lightgrey.svg)](https://developer.apple.com/tvos/)
+[![watchOS](https://img.shields.io/badge/watchOS-6.0+-lightgrey.svg)](https://developer.apple.com/watchos/)
+[![visionOS](https://img.shields.io/badge/visionOS-1.0+-lightgrey.svg)](https://developer.apple.com/visionos/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A lightweight, type-safe dependency injection framework for Swift, inspired by [swift-dependencies](https://github.com/pointfreeco/swift-dependencies) and [SwiftLee's dependency injection approach](https://www.avanderlee.com/swift/dependency-injection/).
+A minimalistic, lightweight, type-safe dependency injection framework for Swift, inspired by [swift-dependencies](https://github.com/pointfreeco/swift-dependencies) and [SwiftLee's dependency injection approach](https://www.avanderlee.com/swift/dependency-injection/).
 
 ## Overview
 
@@ -23,14 +30,32 @@ This library provides a simple way to manage dependencies in your Swift applicat
 
 ## Installation
 
-### Swift Package Manager
+### Using Xcode (Swift Package Manager)
 
-Add the following to your `Package.swift` file:
+1. Open your Xcode project.
+2. Navigate to **File > Swift Packages > Add Package Dependency…**
+3. Enter the repository URL:  
+   `https://github.com/emarashliev/dependency.git`
+
+### Adding via Package.swift
+
+Include the package dependency in your Package.swift file as shown below:
 
 ```swift
-dependencies: [
-    .package(url: "https://github.com/yourusername/Dependency.git", branch: "main")
-]
+
+let package = Package(
+    name: "YourProject",
+    dependencies: [
+        .package(url: "https://github.com/emarashliev/dependency.git", branch: "main")
+    ],
+    targets: [
+        .target(
+            name: "YourProject",
+            dependencies: ["Dependency"]
+        )
+    ]
+)
+
 ```
 
 ## Usage
@@ -118,7 +143,8 @@ let myFeature = withDependencies {
 ## Testing Example
 
 ```swift
-func testFeatureWithMocks() {
+@Test
+func featureWithMocks() {
     let feature = withDependencies {
         // Override dependencies with mocks
         $0.myService = MockMyService()
@@ -127,7 +153,7 @@ func testFeatureWithMocks() {
     }
     
     // Now feature uses MockMyService instead of the default implementation
-    XCTAssertEqual(feature.doWork(), "Mock implementation")
+    #expect(feature.doWork() == "Mock implementation")
 }
 ```
 
@@ -142,4 +168,4 @@ The library consists of a few key components:
 
 ## License
 
-[Your license information here]
+MIT 
