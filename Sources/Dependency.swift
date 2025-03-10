@@ -5,6 +5,7 @@
 //  Created by Emil Marashliev on 27.01.25.
 //
 
+
 @propertyWrapper
 public struct Dependency<Value>: Sendable {
 
@@ -41,12 +42,7 @@ private struct HashableType<T>: Hashable, Sendable {
 
 extension DependencyValues {
     fileprivate subscript<Key: DependencyKey>(key key: HashableType<Key>) -> Key.Value {
-        get {
-            self[Key.self]
-        }
-        set {
-            self[Key.self] = newValue
-        }
+        get { self[Key.self] }
+        set { self[Key.self] = newValue }
     }
 }
-
